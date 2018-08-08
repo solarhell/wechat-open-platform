@@ -5,8 +5,8 @@ import (
 	"errors"
 )
 
-func (c *Client) GetAccessToken() (ak AccessToken, err error) {
-	api, err := TokenURL(c.appId, c.appSecret)
+func (c *Client) GetAccessToken(code string) (ak AccessToken, err error) {
+	api, err := TokenURL(c.appId, c.appSecret, code)
 	if err != nil {
 		return ak, err
 	}

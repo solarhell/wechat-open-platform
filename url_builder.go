@@ -25,7 +25,7 @@ func UserInfoURL(accessToken, openId string) (s string, err error) {
 	return u.String(), nil
 }
 
-func TokenURL(appId, appSecret string) (s string, err error) {
+func TokenURL(appId, appSecret, code string) (s string, err error) {
 	u, err := url.Parse(baseURL + tokenAPI)
 	if err != nil {
 		return s, err
@@ -35,6 +35,7 @@ func TokenURL(appId, appSecret string) (s string, err error) {
 
 	query.Set("appid", appId)
 	query.Set("secret", appSecret)
+	query.Set("code", code)
 	query.Set("grant_type", "authorization_code")
 
 	u.RawQuery = query.Encode()
