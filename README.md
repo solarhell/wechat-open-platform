@@ -5,16 +5,16 @@
 Golang 微信开放平台 SDK
 
 ## done
-登录和解密用户信息
+获取用户信息
 AccessToken(需持久化 防止超过请求限制)
-生成二维码
+RefreshToken
 
 ## todo
 
 
 ## usage
 
-### 登录
+### 获取用户信息
 ```go
 package mina
 
@@ -31,27 +31,20 @@ func main() {
 			ResponseHeader: true,
 			ResponseBody:   true,
 		},
-	})
+	}, "appId", "appSecret")
 
-	ui, err := c.Login("appid", "secret", "code")
-	...
+	ak, err := c.GetAccessToken("code")
+	if err != nil {
+		// err handle
+		...
+	}
+	
+	ui, err := c.GetUserInfo(ak.AccessToken, ak.Openid)
+	if err != nil {
+		// err handle
+		...
+	}
+	
+	
 }
-```
-
-### 生成不限量二维码
-```go
-recordId := 23333
-scene := fmt.Sprintf("target_id=%d", recordId)
-if len(scene) > 32 {
-	err
-	...
-}
-param := mina.QRCoder{
-	Scene:     scene,
-	Page:      "pages/index/index",
-	Width:     430,
-	AutoColor: true,
-	IsHyaline: true,
-}
-...
 ```
