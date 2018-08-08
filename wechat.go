@@ -5,8 +5,8 @@ import (
 	"errors"
 )
 
-func (c *Client) GetUserInfo(accessToken AccessToken, openId string) (ui UserInfo, err error) {
-	api, err := UserInfoURL(accessToken.AccessToken, openId)
+func (c *Client) GetUserInfo(accessToken, openId string) (ui UserInfo, err error) {
+	api, err := UserInfoURL(accessToken, openId)
 	if err != nil {
 		return ui, err
 	}
