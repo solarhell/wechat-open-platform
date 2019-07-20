@@ -19,27 +19,17 @@ RefreshToken
 package mina
 
 import (
-	"github.com/solarhell/wechat-open-platform"
-	"net/http"
+	WOP "github.com/solarhell/wechat-open-platform"
 )
 
 func main() {
-	c := wechatopenplatform.NewClient(&http.Client{
-		Transport: &wechatopenplatform.DebugRequestTransport{
-			RequestHeader:  true,
-			RequestBody:    true,
-			ResponseHeader: true,
-			ResponseBody:   true,
-		},
-	}, "appId", "appSecret")
-
-	ak, err := c.GetAccessToken("code")
+	ak, err := WOP.GetAccessToken("appId", "appSecret", "code")
 	if err != nil {
 		// err handle
 		...
 	}
 	
-	ui, err := c.GetUserInfo(ak.AccessToken, ak.Openid)
+	ui, err := WOP.GetUserInfo(ak.AccessToken, ak.Openid)
 	if err != nil {
 		// err handle
 		...

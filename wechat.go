@@ -1,28 +1,26 @@
 package wechatopenplatform
 
 import (
-	"encoding/json"
 	"errors"
+	"github.com/imroc/req"
 )
 
-func (c *Client) GetUserInfo(accessToken, openId string) (ui UserInfo, err error) {
+func GetUserInfo(accessToken, openId string) (ui UserInfo, err error) {
 	api, err := UserInfoURL(accessToken, openId)
 	if err != nil {
 		return ui, err
 	}
 
-	res, err := c.client.Get(api)
-
+	r, err := req.Get(api)
 	if err != nil {
 		return ui, err
 	}
-	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
+	if r.Response().StatusCode != 200 {
 		return ui, ErrConnectWechatServer
 	}
 
-	err = json.NewDecoder(res.Body).Decode(&ui)
+	err = r.ToJSON(&ui)
 	if err != nil {
 		return ui, err
 	}

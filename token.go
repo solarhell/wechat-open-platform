@@ -1,28 +1,26 @@
 package wechatopenplatform
 
 import (
-	"encoding/json"
 	"errors"
+	"github.com/imroc/req"
 )
 
-func (c *Client) GetAccessToken(code string) (ak AccessToken, err error) {
-	api, err := TokenURL(c.appId, c.appSecret, code)
+func GetAccessToken(appId, appSecret, code string) (ak AccessToken, err error) {
+	api, err := TokenURL(appId, appSecret, code)
 	if err != nil {
 		return ak, err
 	}
 
-	res, err := c.client.Get(api)
-
+	r, err := req.Get(api)
 	if err != nil {
 		return ak, err
 	}
-	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
+	if r.Response().StatusCode != 200 {
 		return ak, ErrConnectWechatServer
 	}
 
-	err = json.NewDecoder(res.Body).Decode(&ak)
+	err = r.ToJSON(&ak)
 	if err != nil {
 		return ak, err
 	}
@@ -34,24 +32,22 @@ func (c *Client) GetAccessToken(code string) (ak AccessToken, err error) {
 	return ak, nil
 }
 
-func (c *Client) RefreshToken(refreshToken string) (ak AccessToken, err error) {
-	api, err := RefreshTokenURL(c.appId, refreshToken)
+func RefreshToken(appId, refreshToken string) (ak AccessToken, err error) {
+	api, err := RefreshTokenURL(appId, refreshToken)
 	if err != nil {
 		return ak, err
 	}
 
-	res, err := c.client.Get(api)
-
+	r, err := req.Get(api)
 	if err != nil {
 		return ak, err
 	}
-	defer res.Body.Close()
 
-	if res.StatusCode != 200 {
+	if r.Response().StatusCode != 200 {
 		return ak, ErrConnectWechatServer
 	}
 
-	err = json.NewDecoder(res.Body).Decode(&ak)
+	err = r.ToJSON(&ak)
 	if err != nil {
 		return ak, err
 	}
